@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "picture": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "registerDate": {
+      "type": "string"
+    },
+    "updatedDate": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "firstName",
+    "lastName",
+    "email",
+    "registerDate",
+    "updatedDate"
+  ]
+}

@@ -1,0 +1,106 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.fajarb'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // api automation
+    testImplementation group: 'io.rest-assured', name: "rest-assured", version: '4.5.1'
+    implementation group: 'org.json', name: 'json', version: '20230227'
+    testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: '4.5.1'
+
+    // fix error slf4j
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'ch.qos.logback:logback-classic:1.2.9'
+
+    // web automation
+    implementation 'org.seleniumhq.selenium:selenium-java:4.9.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.3.2'
+
+    implementation 'io.cucumber:cucumber-java:7.11.2'
+    testImplementation 'io.cucumber:cucumber-junit:7.11.2'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+}
+
+//test {
+//    useJUnitPlatform()
+//}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+//def tags = (findProperty('tags') == null) ? 'not @exclude' : findProperty('tags') + ' and not @exclude'
+//
+//task cucumber() {
+//    description("Running Cucumber Test")
+//    dependsOn assemble, compileTestJava
+//    doLast {
+//        javaexec {
+//            main = "io.cucumber.core.cli.Main"
+//            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+//            args = [
+//                    '--plugin', 'html:reports/index.html',
+//                    '--plugin', 'json:reports/index.json',
+//                    '--plugin', 'pretty',
+//                    '--glue', 'com.fajarb',
+//                    '--tags', "${tags}",
+//                    'src/test/resources'
+//            ]
+//        }
+//    }
+//}
+
+task web() {
+    description("Running Cucumber for Web UI Test")
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'html:reports/report-web.html',
+                    '--plugin', 'json:reports/report-web.json',
+                    '--plugin', 'pretty',
+                    '--glue', 'com.fajarb',
+                    '--tags', "@web",
+                    'src/test/resources/web'
+            ]
+        }
+    }
+}
+
+task api() {
+    description("Running Cucumber for API Test")
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'html:reports/report-api.html',
+                    '--plugin', 'json:reports/report-api.json',
+                    '--plugin', 'pretty',
+                    '--glue', 'com.fajarb',
+                    '--tags', "@api",
+                    'src/test/resources/api'
+            ]
+        }
+    }
+}
+
+
+
+
+
